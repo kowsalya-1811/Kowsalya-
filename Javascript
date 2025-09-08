@@ -1,0 +1,101 @@
+// Function to check if an element is in the viewport
+function isInViewport(element) {
+    const rect = element.getBoundingClientRect();
+    return (
+        rect.top >= 0 &&
+        rect.left >= 0 &&
+        rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+        rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+    );
+}
+
+// Function to add the 'visible' class when section is in viewport
+function checkVisibility() {
+    const sections = document.querySelectorAll('.section');
+    sections.forEach(section => {
+        if (isInViewport(section)) {
+            section.classList.add('visible');
+        }
+    });
+}
+
+// Check visibility on load and scroll
+window.addEventListener('load', checkVisibility);
+window.addEventListener('scroll', checkVisibility);
+
+// Create more butterflies dynamically
+function createButterflies() {
+    const header = document.querySelector('header');
+    for (let i = 0; i < 8; i++) {
+        const butterfly = document.createElement('div');
+        butterfly.classList.add('butterfly');
+        butterfly.style.top = Math.random() * 80 + '%';
+        butterfly.style.left = Math.random() * 90 + '%';
+        butterfly.style.animationDelay = Math.random() * 5 + 's';
+        header.appendChild(butterfly);
+    }
+}
+
+// Add floating flowers to the background
+function addFloatingFlowers() {
+    const body = document.querySelector('body');
+    const flowerIcons = ['🌸', '🌺', '🌷', '🌼', '💮', '🏵️'];
+    
+    for (let i = 0; i < 15; i++) {
+        const flower = document.createElement('div');
+        flower.classList.add('flower');
+        flower.innerHTML = flowerIcons[Math.floor(Math.random() * flowerIcons.length)];
+        flower.style.position = 'fixed';
+        flower.style.fontSize = (Math.random() * 20 + 15) + 'px';
+        flower.style.left = Math.random() * 100 + 'vw';
+        flower.style.top = Math.random() * 100 + 'vh';
+        flower.style.opacity = Math.random() * 0.5 + 0.3;
+        flower.style.animation = `floatFlower ${Math.random() * 10 + 15}s infinite ease-in-out`;
+        flower.style.zIndex = '-1';
+        body.appendChild(flower);
+    }
+}
+
+// Add CSS for floating flowers
+const flowerStyle = document.createElement('style');
+flowerStyle.innerHTML = `
+    @keyframes floatFlower {
+        0% { transform: translate(0, 0) rotate(0deg); }
+        25% { transform: translate(${Math.random() * 100 - 50}px, ${Math.random() * 100 - 50}px) rotate(${Math.random() * 20 - 10}deg); }
+        50% { transform: translate(${Math.random() * 100 - 50}px, ${Math.random() * 100 - 50}px) rotate(${Math.random() * 20 - 10}deg); }
+        75% { transform: translate(${Math.random() * 100 - 50}px, ${Math.random() * 100 - 50}px) rotate(${Math.random() * 20 - 10}deg); }
+        100% { transform: translate(0, 0) rotate(0deg); }
+    }
+`;
+document.head.appendChild(flowerStyle);
+
+// Initialize all effects when the page loads
+window.addEventListener('load', function() {
+    createButterflies();
+    addFloatingFlowers();
+    
+    // Add subtle pulse animation to social links
+    const socialLinks = document.querySelectorAll('.social-links a');
+    socialLinks.forEach(link => {
+        link.style.animation = `pulse 2s ${Math.random() * 2}s infinite`;
+    });
+});
+
+// Add interactive cursor effect
+document.addEventListener('mousemove', function(e) {
+    const cursorFlower = document.querySelector('.cursor-flower');
+    if (!cursorFlower) {
+        const newFlower = document.createElement('div');
+        newFlower.classList.add('cursor-flower');
+        newFlower.innerHTML = '🦋';
+        newFlower.style.position = 'fixed';
+        newFlower.style.fontSize = '20px';
+        newFlower.style.pointerEvents = 'none';
+        newFlower.style.zIndex = '9999';
+        newFlower.style.transform = 'translate(-50%, -50%)';
+        document.body.appendChild(newFlower);
+    } else {
+        cursorFlower.style.left = e.pageX + 'px';
+        cursorFlower.style.top = e.pageY + 'px';
+    }
+});
